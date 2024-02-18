@@ -6,3 +6,8 @@
 .App > div {
   margin-right: 50px;
 }
+
+.taskTitleInputError {
+    border: 2px solid red;
+    outline: none;
+}
