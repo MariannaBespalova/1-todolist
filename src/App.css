@@ -11,3 +11,17 @@
     border: 2px solid red;
     outline: none;
 }
+
+.task {
+    font-weight: bold;
+}
+
+.task-is-done {
+    opacity: 0.5;
+}
+
+.btn-selected {
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+}

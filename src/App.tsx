@@ -5,6 +5,17 @@ import {v1} from "uuid";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
+export function getFilteredTasks (allTasks:TaskType[], filterValue: FilterValuesType):TaskType[] {
+  let tasksForToDoList = allTasks;
+  if(filterValue === "active") {
+    tasksForToDoList = allTasks.filter(task => !task.isDone)
+  }
+  if(filterValue === "completed") {
+    tasksForToDoList = allTasks.filter(task => task.isDone)
+  }
+  return tasksForToDoList;
+}
+
 function App() {
   let [tasks, setTasks] = useState<TaskType[]>([
     { id: v1(), title: "HTML&CSS", isDone: true },
@@ -25,14 +36,7 @@ function App() {
     setTasks(tasks.filter(task => task.id !== id))
   }
 
-  let tasksForToDoList = tasks;
-
-  if(filter === "active") {
-    tasksForToDoList = tasks.filter(task => !task.isDone)
-  }
-  if(filter === "completed") {
-    tasksForToDoList = tasks.filter(task => task.isDone)
-  }
+  const filteredTasks = getFilteredTasks(tasks, filter)
 
   const filterTasks = (filterName: FilterValuesType) => {
     setFilter(filterName)
@@ -43,9 +47,27 @@ function App() {
     const nextState=[newTask,...tasks]
     setTasks(nextState)
   }
+
+  function setTaskStatus (id: string, newIsDone:boolean) {
+/*    let task = tasks.find(tasks => tasks.id === id)
+    if (task) {
+      task.isDone = !task.isDone
+      setTasks([...tasks])
+    }*/
+
+    const newState = tasks.map(task => task.id === id ? {...task, isDone: newIsDone} : task)
+    setTasks(newState)
+  }
   return (
     <div className="App">
-      <TodoList title={"What to learn"} tasks={tasksForToDoList} removeTask={removeTask} filterTasks={filterTasks} addTask={addTask}/>
+      <TodoList
+        title={"What to learn"}
+        tasks={filteredTasks}
+        filter={filter}
+        removeTask={removeTask}
+        filterTasks={filterTasks}
+        addTask={addTask}
+        changeTaskStatus={setTaskStatus}/>
     </div>
   );
 }
