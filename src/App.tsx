@@ -68,20 +68,10 @@ function App() {
     const taskId = v1()
     const newTask = {id: taskId, title: taskTitle, isDone: false}
     setTasks({...tasks, [todoListId]:[newTask, ...tasks[todoListId]] })
-/*    const newTask: TaskType = {id: v1(), title: taskTitle, isDone: false}
-    const nextState = [newTask, ...tasks]
-    setTasks(nextState)*/
   }
 
-  function setTaskStatus(id: string, newIsDone: boolean) {
-    /*    let task = tasks.find(tasks => tasks.id === id)
-        if (task) {
-          task.isDone = !task.isDone
-          setTasks([...tasks])
-        }*/
-
-/*    const newState = tasks.map(task => task.id === id ? {...task, isDone: newIsDone} : task)*/
-/*    setTasks(newState)*/
+  function setTaskStatus(todoListId:string, id: string, isDone: boolean) {
+    setTasks({...tasks, [todoListId]:tasks[todoListId].map(el => el.id === id ? {...el, isDone} :el)})
   }
 
   return (
