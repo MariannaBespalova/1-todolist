@@ -8,7 +8,7 @@ type TodoListPropsType = {
   filter: FilterValuesType
   removeTask: (todoListId:string, id: string) => void
   filterTasks: (todoListId:string, filterName: FilterValuesType) => void
-  addTask: (taskTitle: string) => void
+  addTask: (todoListId:string, taskTitle: string) => void
   changeTaskStatus: (id: string, newIsDone: boolean) => void
 }
 
@@ -26,7 +26,7 @@ export function TodoList(props: TodoListPropsType) {
 
   function addTask() {
     let trimedTitle = taskTitle.trim()
-    trimedTitle ? props.addTask(taskTitle) : setTaskInputError(true)
+    trimedTitle ? props.addTask(props.todoListId, taskTitle) : setTaskInputError(true)
     setTaskTitle('')
     setTaskInputError(false)
   }

@@ -60,13 +60,14 @@ function App() {
     setTasks({...tasks, [todoListId]:tasks[todoListId].filter(el=>el.id!==id)})
   }
 
-
-
   const filterTasks = (todoListId:string, filter:FilterValuesType) => {
     setTodoLists(todoLists.map(el=> el.todoListId === todoListId ? {...el, filter} : el))
   }
 
-  function addTask(taskTitle: string) {
+  function addTask(todoListId:string, taskTitle: string) {
+    const taskId = v1()
+    const newTask = {id: taskId, title: taskTitle, isDone: false}
+    setTasks({...tasks, [todoListId]:[newTask, ...tasks[todoListId]] })
 /*    const newTask: TaskType = {id: v1(), title: taskTitle, isDone: false}
     const nextState = [newTask, ...tasks]
     setTasks(nextState)*/
