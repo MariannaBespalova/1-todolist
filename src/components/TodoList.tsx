@@ -2,11 +2,12 @@ import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {FilterValuesType, getFilteredTasks} from "../App";
 
 type TodoListPropsType = {
+  todoListId:string
   title: string,
   tasks: Array<TaskType>
   filter: FilterValuesType
-  removeTask: (id: string) => void
-  filterTasks: (filterName: FilterValuesType) => void
+  removeTask: (todoListId:string, id: string) => void
+  filterTasks: (todoListId:string, filterName: FilterValuesType) => void
   addTask: (taskTitle: string) => void
   changeTaskStatus: (id: string, newIsDone: boolean) => void
 }
@@ -40,7 +41,7 @@ export function TodoList(props: TodoListPropsType) {
       e.key === 'Enter' && addTask()
     }
   }
-  const activeTasks = getFilteredTasks(props.tasks, 'active')
+/*  const activeTasks = getFilteredTasks(props.tasks, 'active')*/
   const isAddTaskEmpty = taskTitle.length === 0 || taskTitle.length > 10;
 
   const taskTitleInputErrorClass = isInputError ? 'taskTitleInputError' : '';
@@ -56,7 +57,7 @@ export function TodoList(props: TodoListPropsType) {
         <button onClick={changeCollapsed}>{isCollapsed ? 'Open' : 'Close'}</button>
       </div>
       {isCollapsed ? <div style={{paddingBottom: '20px'}}>Number of active tasks:
-        <span> {activeTasks.length}</span>
+        <span> </span>
       </div> : null}
       {isCollapsed ? null : <div>
         <div>
@@ -83,7 +84,7 @@ export function TodoList(props: TodoListPropsType) {
                   onChange={(e) => props.changeTaskStatus(task.id, e.currentTarget.checked)}/>
                 <span className={taskClass.join(' ')}>{task.title}</span>
                 <button onClick={() => {
-                  props.removeTask(task.id)
+                  props.removeTask(props.todoListId, task.id)
                 }}>✖
                 </button>
               </li>
@@ -93,13 +94,13 @@ export function TodoList(props: TodoListPropsType) {
 
         <div style={{display: "flex", gap: "20px"}}>
           <button className={props.filter === "all" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks("all")}>All
+                  onClick={() => props.filterTasks(props.todoListId, "all")}>All
           </button>
           <button className={props.filter === "active" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks("active")}>Active
+                  onClick={() => props.filterTasks(props.todoListId, "active")}>Active
           </button>
           <button className={props.filter === "completed" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks("completed")}>Completed
+                  onClick={() => props.filterTasks(props.todoListId, "completed")}>Completed
           </button>
         </div>
       </div>}
