@@ -41,7 +41,7 @@ export function TodoList(props: TodoListPropsType) {
       e.key === 'Enter' && addTask()
     }
   }
-/*  const activeTasks = getFilteredTasks(props.tasks, 'active')*/
+
   const isAddTaskEmpty = taskTitle.length === 0 || taskTitle.length > 10;
 
   const taskTitleInputErrorClass = isInputError ? 'taskTitleInputError' : '';
@@ -50,6 +50,16 @@ export function TodoList(props: TodoListPropsType) {
     setIsCollapsed(!isCollapsed)
   }
 
+  let filteredTasks = props.tasks;
+  if (props.filter === "active") {
+    filteredTasks = props.tasks.filter(task => !task.isDone)
+  }
+  if (props.filter === "completed") {
+    filteredTasks = props.tasks.filter(task=> task.isDone)
+  }
+
+  const activeTasks = props.tasks.filter(el => !el.isDone)
+
   return (
     <div>
       <div style={{display:"flex", gap:'10px', paddingBottom: '10px'}}>
@@ -57,7 +67,7 @@ export function TodoList(props: TodoListPropsType) {
         <button onClick={changeCollapsed}>{isCollapsed ? 'Open' : 'Close'}</button>
       </div>
       {isCollapsed ? <div style={{paddingBottom: '20px'}}>Number of active tasks:
-        <span> </span>
+        <span>{activeTasks.length}</span>
       </div> : null}
       {isCollapsed ? null : <div>
         <div>
@@ -71,7 +81,7 @@ export function TodoList(props: TodoListPropsType) {
           {isInputError && <div style={{color: 'red'}}>Not valid</div>}
         </div>
         <ul>
-          {props.tasks.map((task: TaskType) => {
+          {filteredTasks.map((task: TaskType) => {
             let taskClass = ['task']
             if (task.isDone) {
               taskClass = [...taskClass, "task-is-done"]
