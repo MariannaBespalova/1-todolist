@@ -10,6 +10,7 @@ type TodoListPropsType = {
   filterTasks: (todoListId:string, filterName: FilterValuesType) => void
   addTask: (todoListId:string, taskTitle: string) => void
   changeTaskStatus: (todoListId:string, id: string, newIsDone: boolean) => void
+  deleteTodoList: (todoListId:string) => void
 }
 
 export type TaskType = {
@@ -42,6 +43,10 @@ export function TodoList(props: TodoListPropsType) {
     }
   }
 
+  const onClickDeleteHandler = () => {
+    props.deleteTodoList(props.todoListId)
+  }
+
   const isAddTaskEmpty = taskTitle.length === 0 || taskTitle.length > 10;
 
   const taskTitleInputErrorClass = isInputError ? 'taskTitleInputError' : '';
@@ -64,6 +69,7 @@ export function TodoList(props: TodoListPropsType) {
     <div>
       <div style={{display:"flex", gap:'10px', paddingBottom: '10px'}}>
         <h3 style={{margin: '0'}}>{props.title}</h3>
+        <button onClick={onClickDeleteHandler}>Remove</button>
         <button onClick={changeCollapsed}>{isCollapsed ? 'Open' : 'Close'}</button>
       </div>
       {isCollapsed ? <div style={{paddingBottom: '20px'}}>Number of active tasks:
