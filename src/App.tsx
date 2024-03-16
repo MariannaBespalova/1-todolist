@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, TodoList} from "./components/TodoList";
 import {v1} from "uuid";
+import {AddInputForm} from "./components/AddInputForm";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
@@ -46,15 +47,6 @@ function App() {
       {id: v1(), title: "Redux", isDone: false},
       {id: v1(), title: "Rest Api", isDone: false}],
   })
-/*  let [tasks, setTasks] = useState<TaskType[]>([
-    {id: v1(), title: "HTML&CSS", isDone: true},
-    {id: v1(), title: "JS", isDone: true},
-    {id: v1(), title: "ReactJS", isDone: false},
-    {id: v1(), title: "Redux", isDone: false},
-    {id: v1(), title: "Rest Api", isDone: false}
-  ])*/
-
-/*  let [filter, setFilter] = useState<FilterValuesType>("all")*/
 
   const removeTask = (todoListId:string, id: string) => {
     setTasks({...tasks, [todoListId]:tasks[todoListId].filter(el=>el.id!==id)})
@@ -79,8 +71,23 @@ function App() {
     setTasks({...tasks, [todoListId]:tasks[todoListId].map(el => el.id === id ? {...el, isDone} :el)})
   }
 
+  const addTodoListHandler = (title:string) => {
+    const newId = v1()
+    setTodoLists([...todoLists, {todoListId: newId, title, filter:"all"}])
+    setTasks({...tasks, [newId]: []})
+  }
+
+  const editTaskHandler = (todoListId:string, taskId:string, newTitle:string) => {
+    setTasks({...tasks, [todoListId]:tasks[todoListId].map(el => el.id === taskId ? {...el, title:newTitle}:el)})
+  }
+
+  const editTodoListTitle = (todoListId:string, newTitle:string) => {
+    setTodoLists(todoLists.map(el => el.todoListId === todoListId? {...el, title:newTitle}: el))
+  }
+
   return (
     <div className="App">
+      <AddInputForm onClick={addTodoListHandler}/>
 
       {todoLists.map(el => {
 
@@ -95,7 +102,10 @@ function App() {
             filterTasks={filterTasks}
             addTask={addTask}
             deleteTodoList={deleteTodoList}
-            changeTaskStatus={setTaskStatus}/>)
+            changeTaskStatus={setTaskStatus}
+            editTask={editTaskHandler}
+            editTodoListTitle={editTodoListTitle}
+          />)
       })}
 
     </div>
