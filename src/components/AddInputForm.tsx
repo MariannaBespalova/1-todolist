@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 type AddInputFormProps = {
   onClick: (title:string) => void
@@ -30,15 +32,29 @@ export const AddInputForm = (props:AddInputFormProps) => {
     setTaskInputError(false)
   }
 
+  const buttonStyle ={
+    maxWidth: "39px",
+    minHeight: "39px",
+    minWidth: "39px",
+    maxHeight: "39px",
+    backgroundColor:''
+  }
+
   return (
     <div>
-      <input
+      <TextField
+        error={isInputError}
         value={title}
         onChange={onChangeHandler}
         placeholder={"Enter max 10 charts"}
         className={taskTitleInputErrorClass}
-        onKeyDown={addTaskOnPress}/>
-      <button onClick={addTask} disabled={isAddTaskEmpty}>+</button>
+        onKeyDown={addTaskOnPress}
+        id="outlined-basic"
+        label="Type smth..."
+        size="small"
+        variant="outlined" />
+      <Button size="small" variant="contained" onClick={addTask} disabled={isAddTaskEmpty}
+              style={buttonStyle}>+</Button>
       {isInputError && <div style={{color: 'red'}}>Not valid</div>}
     </div>
   );

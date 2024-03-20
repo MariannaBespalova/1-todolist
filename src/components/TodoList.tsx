@@ -1,7 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {FilterValuesType, getFilteredTasks} from "../App";
+import React, {useState} from "react";
+import {FilterValuesType} from "../App";
 import {AddInputForm} from "./AddInputForm";
 import {EditableSpan} from "./EditableSpan";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
 
 type TodoListPropsType = {
   todoListId:string
@@ -59,11 +62,13 @@ export function TodoList(props: TodoListPropsType) {
 
   return (
     <div>
-      <div style={{display:"flex", gap:'10px', paddingBottom: '10px'}}>
+      <div style={{display:"flex", gap:'10px', paddingBottom: '10px', alignItems:'center'}}>
        <h3 style={{margin: '0'}}>
          <EditableSpan oldTitle={props.title} callBack={editTodoListTitleHandler} />
        </h3>
-        <button onClick={onClickDeleteHandler}>Remove</button>
+        <IconButton aria-label="delete" onClick={onClickDeleteHandler}>
+          <DeleteIcon />
+        </IconButton>
         <button onClick={changeCollapsed}>{isCollapsed ? 'Open' : 'Close'}</button>
       </div>
       {isCollapsed ? <div style={{paddingBottom: '20px'}}>Number of active tasks:
@@ -85,27 +90,29 @@ export function TodoList(props: TodoListPropsType) {
                   type="checkbox"
                   checked={task.isDone}
                   onChange={(e) => props.changeTaskStatus(props.todoListId, task.id, e.currentTarget.checked)}/>
-                {/*<span className={taskClass.join(' ')}>{task.title}</span>*/}
                 <EditableSpan className={taskClass.join(' ')} callBack={(newTitle)=>editSpanHandler(task.id, newTitle)} oldTitle={task.title}/>
-                <button onClick={() => {
-                  props.removeTask(props.todoListId, task.id)
-                }}>✖
-                </button>
+                <IconButton aria-label="delete" onClick={() => {props.removeTask(props.todoListId, task.id)}}>
+                  <DeleteIcon />
+                </IconButton>
               </li>
             )
           })}
         </ul>
 
         <div style={{display: "flex", gap: "20px"}}>
-          <button className={props.filter === "all" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks(props.todoListId, "all")}>All
-          </button>
-          <button className={props.filter === "active" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks(props.todoListId, "active")}>Active
-          </button>
-          <button className={props.filter === "completed" ? "btn-selected" : undefined}
-                  onClick={() => props.filterTasks(props.todoListId, "completed")}>Completed
-          </button>
+          <Button variant={props.filter === "all" ? "contained" : "outlined"} color="primary"
+                  onClick={() => props.filterTasks(props.todoListId, "all")}>
+            All
+          </Button>
+          <Button variant={props.filter === "active" ? "contained" : "outlined"} color="success"
+                  onClick={() => props.filterTasks(props.todoListId, "active")}>
+            Active
+          </Button>
+
+          <Button variant={props.filter === "completed" ? "contained" : "outlined"} color="secondary"
+                  onClick={() => props.filterTasks(props.todoListId, "completed")}>
+            Completed
+          </Button>
         </div>
       </div>}
     </div>
